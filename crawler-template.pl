@@ -5,7 +5,8 @@
 use strict;
 use warnings;
 
-use CTF::Crawler::HTTP ();
+use CTF::Crawler::HTTP;
+use CTF::Crawler::Telnet;
 use Data::Dumper;
 
 $| = 1;
@@ -22,6 +23,10 @@ my $crwl = CTF::Crawler::HTTP->new(
 	agent		=> "Safari.. LOL"
 );
 
+my $crwl_23 = CTF::Crawler::Telnet->new(
+	timeout	=> 10
+);
+
 # use hashrefs for POST data
 my $data = {
 	f => "oo",
@@ -36,5 +41,13 @@ print Dumper($crwl->redirects);
 hr("GET / Find Flags");
 $crwl->get($url2);
 print Dumper($crwl->flags);
+
+hr("Telnet / Find Flags");
+$crwl_23->open("localhost", 23332);
+#$crwl_23->readln;
+#$crwl_23->writeln("foo");
+$crwl_23->readall;
+$crwl_23->close;
+print Dumper($crwl_23->flags);
 
 exit 0;
