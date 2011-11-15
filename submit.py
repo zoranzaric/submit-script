@@ -2,20 +2,22 @@
 from telnetlib import Telnet
 import sys
 
-def submit(flag):
-    t = Telnet("localhost", 8888)
-    t.read_very_eager()
+class Submitter():
+    def __init__(self):
+        self.t = Telnet("10.11.0.1", 1)
+        self.t.read_very_eager()
 
-    t.write(flag)
-    result = t.read_very_eager()
-    if result == "nope...\n\n":
-        print "no"
-    elif result == "KTHXBYE!\n\n":
-        print "yes"
-    elif result == "U MAD?!\n\n":
-        print "..."
 
-    t.close()
+    def submit(self, flag):
+        self.t.write(flag)
+        result = self.t.read_very_eager()
+        if result.strip() == "Invalid flag.":
+            print "no"
+        elif result.strip() == "Congratulations, you scored a point!":
+            print "yes"
+        elif result.strip() == "U MAD?!\n\n":
+            print "..."
+
 
 if __name__ == '__main__':
     if sys.stdin.isatty():
@@ -23,6 +25,8 @@ if __name__ == '__main__':
     else:
         flags = [line[0:-1] for line in sys.stdin]
 
+    submitter = Submitter()
+
     for flag in flags:
-        submit(flag)
+        submitter.submit(flag)
 
