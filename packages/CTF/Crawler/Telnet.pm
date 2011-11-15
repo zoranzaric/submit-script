@@ -5,7 +5,6 @@ use strict;
 use warnings;
 
 use Net::Telnet ();
-use Data::Dumper;
 
 sub new {
 	my ($class, %args) = @_;
